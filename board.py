@@ -75,9 +75,9 @@ class Country:
         by having more influence than opponent by the stability or greater.'''
 
         if self.us_influence - self.ussr_influence >= self.stability:
-            return US_PLAYER
-        elif self.ussr_influence - ussr_influence >= self.stability:
-            return USSR_PLAYER
+            return SuperPower.us
+        elif self.ussr_influence - self.ussr_influence >= self.stability:
+            return SuperPower.ussr
         else:
             return None
 
@@ -131,7 +131,7 @@ class Country:
             if MAP_USSR_SP in self.neighbors:
                 return True
 
-        if any(country.has_player_influence(player) for country in self.neighbors):
+        if any(country.has_player_influence(player) if country not in [MAP_US_SP, MAP_USSR_SP] else country == player for country in self.neighbors):
                 return True
 
         return False
@@ -201,6 +201,10 @@ class CountryBundle(dict):
 
     def is_adjacent_to(self, player):
         return CountryBundle({name: country for name, country in self.items() if country.is_adjacent_to(player)})
+
+
+    def not_enemy_controlled(self, player):
+        return CountryBundle({name: country for name, country in self.items() if country.controlled_by() != ~player})
 
 
 

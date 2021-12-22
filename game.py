@@ -1,6 +1,6 @@
 '''What runs the actual game itself.'''
 
-from copy import copy
+import itertools
 
 from cards import EARLY_WAR_CARDS, Pile, Card
 from board import MAP, Defcon, SpaceRace
@@ -80,16 +80,36 @@ def expand_coup_actions(card, game_state, player, action_type='COUP'):
     return coup_actions
 
 
-def expand_one_ops_influence(game_state, player):
+def expand_one_ops_influence(card, game_state, player):
+    '''With one ops, we can add one influence to any country
+    1) We are adjacent to
+    2) Is not enemy controlled
+    '''
 
-    pass
+    adjacent = game_state.map.countries.not_enemy_controlled(player.superpower).is_adjacent_to(player.superpower)
+    print(adjacent)
+    influence_actions = [('INFLUENCE', card, country, 1) for country in adjacent]
+
+    return influence_actions
 
 
-def expand_two_ops_influence(game_state, player):
+def expand_two_ops_influence(card, game_state, player):
 
     # start with all the available options for one ops, twice
     # this will include placing 2 influence in a country (in serial, which is fine)
-    influence_actions = expand_one_ops_influence(game_state, player) * 2
+    one_ops = expand_one_ops_influence(card, game_state, player)
+    influence_actions = list(itertools.product(one_ops))
+
+    return []
+
+
+def expand_three_ops_influence(card, game_state, player):
+
+    return []
+
+
+def expand_four_ops_influence(card, game_state, player):
+    return []
 
 
 def expand_influence_actions(card, game_state, player):
@@ -121,6 +141,8 @@ def expand_influence_actions(card, game_state, player):
                  3: expand_three_ops_influence,
                  4: expand_four_ops_influence,
                  }
+
+    return allocator[ops_value](card, game_state, player)
 
 
 def expand_ops_actions(card, game_state, player):
