@@ -76,7 +76,7 @@ class Country:
 
         if self.us_influence - self.ussr_influence >= self.stability:
             return SuperPower.us
-        elif self.ussr_influence - self.ussr_influence >= self.stability:
+        elif self.ussr_influence - self.us_influence >= self.stability:
             return SuperPower.ussr
         else:
             return None
@@ -132,6 +132,17 @@ class Country:
                 return True
 
         if any(country.has_player_influence(player) if country not in [MAP_US_SP, MAP_USSR_SP] else country == player for country in self.neighbors):
+                return True
+
+        return False
+
+
+    def control_margin(self, player, margin):
+        if ~player == SuperPower.us:
+            if self.us_influence - self.stability == margin:
+                return True
+        if ~player == SuperPower.ussr:
+            if self.ussr_influence - self.stability == margin:
                 return True
 
         return False
@@ -206,6 +217,13 @@ class CountryBundle(dict):
     def not_enemy_controlled(self, player):
         return CountryBundle({name: country for name, country in self.items() if country.controlled_by() != ~player})
 
+
+    def enemy_controlled(self, player):
+        return CountryBundle({name: country for name, country in self.items() if country.controlled_by() == ~player})
+
+
+    def control_margin(self, player, margin):
+        return CountryBundle({name: country for name, country in self.items() if country.control_margin(player, margin)})
 
 
 class Map:
@@ -311,7 +329,7 @@ MAP = Map([# EUROPE
            Country('Thailand', 'asia', ('asia', 'southeast_asia'), ['Laos/Cambodia', 'Vietnam', 'Malaysia'], 2, 0, 0, True),
            Country('Malaysia', 'asia', ('asia', 'southeast_asia'), ['Thailand', 'Australia', 'Indonesia'], 2, 0, 0),
            Country('Australia', 'asia', 'asia', ['Malaysia'], 4, 4, 0),
-           Country('Indonesia', 'asia', ('asia', 'southeast_asia'), ['Malaysia', 'Phillipines'], 1, 1, 0),
+           Country('Indonesia', 'asia', ('asia', 'southeast_asia'), ['Malaysia', 'Phillipines'], 1, 0, 0),
            Country('Phillipines', 'asia', ('asia', 'southeast_asia'), ['Indonesia', 'Japan'], 2, 1, 0),
            Country('Japan', 'asia', 'asia', ['Phillipines', 'South Korea', 'Taiwan', MAP_US_SP], 4, 1, 0, True),
            Country('Taiwan', 'asia', 'asia', ['Japan', 'South Korea'], 3, 0, 0),

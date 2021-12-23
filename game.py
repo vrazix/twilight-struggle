@@ -81,35 +81,98 @@ def expand_coup_actions(card, game_state, player, action_type='COUP'):
 
 
 def expand_one_ops_influence(card, game_state, player):
-    '''With one ops, we can add one influence to any country
+    '''With one ops, we can add one influence to any country which:
     1) We are adjacent to
     2) Is not enemy controlled
     '''
 
     adjacent = game_state.map.countries.not_enemy_controlled(player.superpower).is_adjacent_to(player.superpower)
-    print(adjacent)
+
     influence_actions = [('INFLUENCE', card, country, 1) for country in adjacent]
 
     return influence_actions
 
 
 def expand_two_ops_influence(card, game_state, player):
+    '''With two ops, we can add either:
+    1) One influence to legal spaces followed by one influence in legal spaces
+        This is combinations of 2 with replacement e.g. cwr(ABC, 2):
+        - AA, AB, AC, BB, BC, CC
 
-    # start with all the available options for one ops, twice
+    2) One influence to enemy controlled spaces
+    '''
+
+    # start with all the available options for one ops "twice" (combinations with replacement)
     # this will include placing 2 influence in a country (in serial, which is fine)
     one_ops = expand_one_ops_influence(card, game_state, player)
-    influence_actions = list(itertools.product(one_ops))
+    influence_actions = list(itertools.combinations_with_replacement(one_ops, 2))
 
-    return []
+    # now add all of the opponent's controlled countries, which we can add 1 influence to
+    enemy_controlled = game_state.map.countries.enemy_controlled(player.superpower)
+    influence_actions += [('INFLUENCE', card, country, 1) for country in enemy_controlled]
+
+    return influence_actions
 
 
 def expand_three_ops_influence(card, game_state, player):
+    '''With three ops, we can add either:
+    1) One influence to legal spaces x3 (see expand_two_ops_influence)
 
-    return []
+    2) One influence to an enemy controlled space + One influence to a legal space
+
+    3) Two influence to an space controlled by exactly the stability number
+        e.g. Spain/Portugal (2) has two US influence. We can place 1 to break control,
+        which costs 2 influence points, and then place a second.
+    '''
+
+    # start with all available options for one ops "thrice"
+    one_ops = expand_one_ops_influence(card, game_state, player)
+    influence_actions = list(itertools.combinations_with_replacement(one_ops, 3))
+
+    # where we can add one influence to an enemy controlled space, and then anywhere else
+    enemy_controlled = game_state.map.countries.enemy_controlled(player.superpower)
+    add_enemy_controlled = [('INFLUENCE', card, country, 1) for country in enemy_controlled]
+    enemy_one_and_one_elsewhere = []
+    for add_one_to_enemy in add_enemy_controlled:
+        for one_op in one_ops:
+            enemy_one_and_one_elsewhere.append((add_one_to_enemy, one_op))
+    influence_actions += enemy_one_and_one_elsewhere
+
+    # where we can add two influence to an enemy controlled space
+    # possible where the first will break control, i.e. where enemy influence == stability
+    barely_controlled = enemy_controlled.control_margin(player.superpower, 0)
+    influence_actions += [('INFLUENCE', card, country, 2) for country in barely_controlled]
+
+    return influence_actions
 
 
 def expand_four_ops_influence(card, game_state, player):
-    return []
+    '''With four ops we can...
+    1) One influence to legal spaces x4 (see expand_two_ops_influence)
+
+    2) One influence to an enemy controlled space + one influence to legal spaces x2
+
+    3) One influence to an enemy controlled space controlled by margin 1 x2
+        This captures two influence to margin 1 countries
+    '''
+
+    # as usual, one ops but "fourfold"
+    one_ops = expand_one_ops_influence(card, game_state, player)
+    influence_actions = list(itertools.combinations_with_replacement(one_ops, 4))
+
+    # we can do one enemy controlled space and then one ops twice
+    enemy_controlled = game_state.map.countries.enemy_controlled(player.superpower)
+    add_enemy_controlled = [('INFLUENCE', card, country, 1) for country in enemy_controlled]
+    enemy_one_and_two_elsewhere = []
+    for add_one_to_enemy in add_enemy_controlled:
+        for one_op in itertools.combinations_with_replacement(one_ops, 2):
+            enemy_one_and_two_elsewhere.append((add_one_to_enemy, one_op))
+    return enemy_one_and_two_elsewhere
+    influence_actions += enemy_one_and_two_elsewhere
+
+    # ???
+
+    return influence_actions
 
 
 def expand_influence_actions(card, game_state, player):
@@ -189,6 +252,7 @@ if __name__ == '__main__':
 
     gs = GameState(MAP, EARLY_WAR_CARDS, US_PLAYER, USSR_PLAYER)
     gs.begin_game()
+    basic_starting_influence(MAP)
 
     print(MAP)
     print()
@@ -198,7 +262,6 @@ if __name__ == '__main__':
     print()
 
     # TODO: Give players options for starting influence
-    basic_starting_influence(MAP)
 
     USSR_available = USSR_PLAYER.compute_available_actions()
     US_available = US_PLAYER.compute_available_actions()
@@ -209,8 +272,14 @@ if __name__ == '__main__':
 
     USSR_expanded = expand_available_actions(USSR_available, gs, USSR_PLAYER)
     US_expanded = expand_available_actions(US_available, gs, US_PLAYER)
-    print(f'USSR expanded actions ({len(USSR_expanded)}):', USSR_expanded)
+    print(f'USSR expanded actions ({len(USSR_expanded)}):')#, USSR_expanded)
     print()
-    print(f'US expanded actions ({len(US_expanded)}):', US_expanded)
+    print(f'US expanded actions ({len(US_expanded)}):')#, US_expanded)
+
+    print('Four ops possibilities for influence by USSR with:', EARLY_WAR_CARDS[-5])
+    four_ops = expand_four_ops_influence(EARLY_WAR_CARDS[-5], gs, USSR_PLAYER)
+    print(len(four_ops))
+    #for _ in four_ops[:10]:
+    #    print(_)
 
     #print(gs.map.countries)
