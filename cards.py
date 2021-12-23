@@ -41,6 +41,12 @@ AFRICA_SCORING = ScoringRegion.africa
 SOUTH_AMERICA_SCORING = ScoringRegion.south_am
 
 
+class CardDestination(Enum):
+    discard = 'discard'
+    rfg = 'rfg'
+    other = 'other'
+
+
 class Card:
     '''Generic card object.'''
     _card_class: CardType
@@ -206,3 +212,119 @@ EARLY_WAR_CARDS = (ScoringCard('asia'),
                    )
 
 #print(EARLY_WAR_CARDS)
+
+
+class PlayableEvent:
+
+    def __init__(self, destination):
+        '''Metaclass for event cards when they are played.
+
+        Parameters
+        ----------
+        destination : Pile (???)
+            Where this card goes after resolution. Most regular events
+            go to the discard pile and most starred events go to the
+            removed from game pile, but others will need to do something
+            else, like Missile Envy.
+        '''
+
+        self.destination = CardDestination[destination]
+
+
+    def choices(self):
+        '''Choices made available during the resolution of this card.
+
+        To be implemented by the subclass if any choices.'''
+
+        return None
+
+
+    def __repr__(self):
+
+        return self.__name__
+
+
+class Duck_and_Cover(PlayableEvent):
+    ''''Degrade the DEFCON level by 1. The US receives VP equal to 5 minus the current DEFCON level.'''
+    
+    def __init__(self):
+
+        super().__init__('discard')
+
+
+    def __call__(self, gamestate):
+        '''Execute Duck and Cover event:
+        1) degrade defcon by 1
+        2) check end game
+        3) score += 5 - defcon.defcon_level
+        '''
+
+        new_defcon, thermo_nuclear = gamestate.defcon.decrease_defcon()
+
+        if thermo_nuclear:
+            return True
+
+        gamestate.score += 5 - new_defcon
+
+        return False
+
+
+class Five_Year_Plan(PlayableEvent):
+    '''The USSR must randomly discard a card. If the card has a US associated Event, the Event occurs immediately. If the card has a USSR associated Event or an Event applicable to both players, then the card must be discarded without triggering the Event.'''
+
+    def __init__(self):
+    
+        super().__init__('discard')
+
+
+    def __call__(self, gamestate):
+        '''Execute Five Year Plan Event.
+        1) Attempt to discard a card from USSR player at random.
+            a) if can't, exit False
+            b) if event is US, trigger Event
+            c) otherwise, exit with triggered result'''
+
+        discard = gamestate.ussr_player.discard_at_random()
+
+        if discard and discard.alignment == EventAlignment.ussr:
+            result = discard.event(gamestate)
+        else:
+            return False
+
+        return result
+
+
+class Socialist_Governments(PlayableEvent):
+    '''Remove a total of 3 US Influence from any countries in Western Europe (removing no more than 2 Influence per country). This Event cannot be used after the “#83 – The Iron Lady” Event has been played.'''
+
+    def __init__(self):
+
+        super().__init__('discard')
+
+
+    def __call__(self, gamestate):
+        '''Execute Socialist Governments Event.
+        0) Check for IRON_LADY_PLAYED flag.
+        1) Allow USSR to remove 3 US influence anywhere in Western Europe, no more than 2 per
+        '''
+
+        if gamestate.IRON_LADY_PLAYED:
+            return False
+
+        # ???
+        return False
+        
+
+NAME_TO_PLAYABLE = {'Duck and Cover', Duck_and_Cover,
+                    'Five Year Plan', Five_Year_Plan,
+                    }
+
+
+def attach_playable_events(cards):
+
+    for card in cards:
+
+        card.event = NAME_TO_PLAYABLE[card.name]
+
+
+attach_playable_events(EARLY_WAR_CARDS)

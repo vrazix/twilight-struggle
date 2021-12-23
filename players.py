@@ -1,5 +1,7 @@
 '''Player Logic'''
 
+import random
+
 from utils import SuperPower
 from cards import CHINA_CARD, SCORING, EVENT
 from board import SpaceRace
@@ -50,6 +52,17 @@ class Player:
     def remove_china_card(self):
         '''The China Card can be given to the other player.'''
         self.china_card = 0
+
+
+    def discard_at_random(self):
+
+        if len(self.hand) < 1:
+            return None
+
+        discard = random.sample(self.hand, 1)
+        self.hand.remove(discard)
+
+        return discard
 
 
     def compute_available_actions(self):

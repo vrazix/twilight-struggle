@@ -138,6 +138,7 @@ class Country:
 
 
     def control_margin(self, player, margin):
+
         if ~player == SuperPower.us:
             if self.us_influence - self.stability == margin:
                 return True
@@ -148,9 +149,21 @@ class Country:
         return False
 
 
+    def over_controlled(self, player):
+
+        if ~player == SuperPower.us:
+            if self.us_influence - self.ussr_influence > self.stability:
+                return True
+        if ~player == SuperPower.ussr:
+            if self.ussr_influence - self.us_influence > self.stability:
+                return True
+
+        return False
+
+
     def __repr__(self):
 
-        return f'{self.name}|{self.us_influence}|{self.ussr_influence}'
+        return f'{self.name}({self.stability})|{self.us_influence}|{self.ussr_influence}'
 
 
 class CountryBundle(dict):
@@ -224,6 +237,10 @@ class CountryBundle(dict):
 
     def control_margin(self, player, margin):
         return CountryBundle({name: country for name, country in self.items() if country.control_margin(player, margin)})
+
+
+    def over_controlled(self, player):
+        return CountryBundle({name: country for name, country in self.items() if country.over_controlled(player)})
 
 
 class Map:
@@ -379,7 +396,7 @@ class Defcon:
 
         self.defcon_level -= 1
 
-        return True if self.defcon_level < 2 else False
+        return self.defcon_level, True if self.defcon_level < 2 else False
 
 
     def increase_defcon(self):

@@ -1,6 +1,7 @@
 '''Computing rough statistics for the AI choices.'''
 
 from matplotlib import pyplot as plt
+import numpy as np
 
 from game import GameState, expand_available_actions
 from cards import EARLY_WAR_CARDS, Pile, Card
@@ -14,8 +15,8 @@ us_choices = []
 
 gs = GameState(MAP, EARLY_WAR_CARDS, US_PLAYER, USSR_PLAYER)
 gs.begin_game()
-#basic_starting_influence(MAP)
-worst_case_influence(MAP)
+basic_starting_influence(MAP)
+#worst_case_influence(MAP)
 print(MAP)
 
 for _ in range(1000):
@@ -33,8 +34,9 @@ for _ in range(1000):
 
     gs.reset_game(EARLY_WAR_CARDS)
 
-plt.hist(ussr_choices, 10, alpha=0.5, label='ussr action space')
-plt.hist(us_choices, 10, alpha=0.5, label='us action space')
+bins = np.linspace(0, max(ussr_choices+us_choices), 100)
+plt.hist(ussr_choices, bins, alpha=0.5, label='ussr action space')
+plt.hist(us_choices, bins, alpha=0.5, label='us action space')
 plt.xlabel('Choices on T1')
 plt.title('State-space complexity')
 plt.legend(loc='upper right')
