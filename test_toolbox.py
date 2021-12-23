@@ -16,3 +16,12 @@ def basic_starting_influence(map):
 	map.countries['East Germany'].ussr_influence += 1
 	map.countries['Poland'].ussr_influence += 4
 	map.countries['Yugoslavia'].ussr_influence += 1
+
+
+def worst_case_influence(map):
+	'''How big and bad is this decision space going to get if we uh...
+	put one influence everywhere.'''
+
+	for _, country in map.countries.items():
+		country.us_influence = 1
+		country.ussr_influence = 1

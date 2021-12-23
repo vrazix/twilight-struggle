@@ -29,6 +29,20 @@ class GameState:
         self.ussr_player.recieve_china_card(available=True)
 
 
+    def reset_game(self, cards):
+
+        self.us_player.empty_hand()
+        self.us_player.remove_china_card()
+        self.ussr_player.empty_hand()
+        self.ussr_player.remove_china_card()
+        
+        self.removed_pile = Pile([], 'Removed from the game')
+        self.discard_pile = Pile([], 'Discard')
+        self.draw_pile = Pile(cards, 'Draw', self.discard_pile)
+        
+        self.begin_game()
+
+
 def expand_coup_actions(card, game_state, player, action_type='COUP'):
     '''For a given card, game_state and player, return all of the legal coup
     actions available. For this enumeration, coup and realignments offer identical choices,

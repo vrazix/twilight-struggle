@@ -27,6 +27,10 @@ class Player:
         return hand
 
 
+    def empty_hand(self):
+        self.hand = list()
+
+
     def recieve_cards(self, cards):
         self.hand += cards
 
