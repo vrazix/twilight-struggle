@@ -20,8 +20,13 @@ class GameState:
         self.score = 0
         self.defcon = Defcon()
 
+        # various flags for card events
+        self.IRON_LADY_PLAYED = False
+
 
     def begin_game(self):
+        '''Shuffle the draw pile, deal each player 8 cards and give
+        the USSR player the china card.'''
 
         self.draw_pile.shuffle()
         self.us_player.recieve_cards(self.draw_pile.draw(8))
@@ -30,6 +35,8 @@ class GameState:
 
 
     def reset_game(self, cards):
+        '''Reset player's hands and game piles. Put `cards` in the draw pile.
+        Reshuffle and redeal starting hands.'''
 
         self.us_player.empty_hand()
         self.us_player.remove_china_card()
@@ -58,6 +65,9 @@ def expand_coup_actions(card, game_state, player, action_type='COUP'):
     4: Not in Europe
     3: Not in Asia
     2: Not in Middle East
+
+    As such, all countries with influence in Africa/South America/Central America are always
+    valid targets (CountryBundle.is_not_defcon_restricted()).
     '''
 
     assert action_type in ('COUP', 'REALIGN')
@@ -166,8 +176,8 @@ def expand_four_ops_influence(card, game_state, player):
 
     2) One influence to an enemy controlled space + one influence to legal spaces x2
 
-    3) One influence to an enemy controlled space controlled by margin 1 x2
-        This captures two influence to margin 1 countries
+    3) One influence to an enemy controlled space over controlled x2
+        This captures two influence to overcontrolled countries
     '''
 
     # as usual, one ops but "fourfold"
@@ -176,15 +186,19 @@ def expand_four_ops_influence(card, game_state, player):
 
     # we can do one enemy controlled space and then one ops twice
     enemy_controlled = game_state.map.countries.enemy_controlled(player.superpower)
+
     add_enemy_controlled = [('INFLUENCE', card, country, 1) for country in enemy_controlled]
     enemy_one_and_two_elsewhere = []
     for add_one_to_enemy in add_enemy_controlled:
         for one_op in itertools.combinations_with_replacement(one_ops, 2):
             enemy_one_and_two_elsewhere.append((add_one_to_enemy, one_op))
-    return enemy_one_and_two_elsewhere
+
     influence_actions += enemy_one_and_two_elsewhere
 
-    # ???
+    # we can do two to regions that are overcontrolled
+    over_controlled = enemy_controlled.over_controlled(player.superpower)
+    add_over_controlled = [('INFLUENCE', card, country, 1) for country in over_controlled]
+    influence_actions += list(itertools.combinations_with_replacement(add_over_controlled, 2))
 
     return influence_actions
 
@@ -239,6 +253,11 @@ def expand_ops_actions(card, game_state, player):
     return ops_actions
 
 
+def expand_play_actions(card, game_state, player):
+
+    allocator = {''}
+
+
 def expand_available_actions(action_list, game_state, player):
 
     expanded_actions = []
@@ -255,9 +274,35 @@ def expand_available_actions(action_list, game_state, player):
 
                 expanded_actions += expand_ops_actions(card, game_state, player)
 
-        # chained (e.g., A->B)
+            # unchanged
+            elif action_type == 'SCORE':
+
+                expanded_actions += current_action
+
+            elif action_type == 'PLAY':
+
+                #expanded_actions += expand_play_actions(card, game_state, player)
+                pass
+
+        # chained (e.g., A->B), always involves opponent's event
         else:
-            pass
+            # so what's annoying about this is it represents a jump in the chain
+            # we will have 'PLAY' (opponent choices) -> 'OPS' (our choices)
+            # or 'OPS' (our choices) -> 'PLAY' (opponent choices)
+            # it is 100% possible that the choices available for the second
+            # are dependent on the first, so the calculation needs to be done later!
+            # but right now i have no mechanism for adding to the monte carlo tree
+            # ahead of 'now'.
+
+            # so, we'll just add what we can.
+            for ordered_action in current_action:
+                if action_type == 'PLAY':
+
+                    expanded_actions += ('PASS FOR OPPONENT PLAY', card)
+
+                elif action_type == 'OPS':
+
+                    expanded_actions += expand_ops_actions(card, game_state, player)
 
     return expanded_actions
 

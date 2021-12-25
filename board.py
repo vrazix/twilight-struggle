@@ -70,6 +70,19 @@ class Country:
         self.battleground = battleground
 
 
+    def remove_influence(self, player):
+        if player == SuperPower.us:
+            if self.us_influence > 0:
+                self.us_influence -= 1
+            else:
+                raise ValueError(f'Cannot remove US influence from {self}, has {self.us_influence}.')
+        elif player == SuperPower.ussr:
+            if self.ussr_influence > 0:
+                self.ussr_influence -= 1
+            else:
+                raise ValueError(f'Cannot remove USSR influence from {self}, has {self.ussr_influence}.')
+
+
     def controlled_by(self):
         '''Returns who controls this country, if anyone. Control is obtained
         by having more influence than opponent by the stability or greater.'''
@@ -86,26 +99,28 @@ class Country:
         return bool(self.us_influence + self.ussr_influence)
 
 
-    def has_enemy_influence(self, enemy):
+    def has_enemy_influence(self, enemy, margin=0):
+        '''Returns whether the country has more than `margin` enemy influence, default 0.'''
 
         if enemy == SuperPower.ussr:
-            if self.us_influence > 0:
+            if self.us_influence > margin:
                 return True
         elif enemy == SuperPower.us:
-            if self.ussr_influence > 0:
+            if self.ussr_influence > margin:
                 return True
 
         return False
 
 
-    def has_player_influence(self, player):
+    def has_player_influence(self, player, margin=0):
+        '''Returns whether the country has more than `margin` influence, default 0.'''
 
         if player == SuperPower.us:
-            if self.us_influence > 0:
+            if self.us_influence > margin:
                 return True
 
         if player == SuperPower.ussr:
-            if self.ussr_influence > 0:
+            if self.ussr_influence > margin:
                 return True
 
         return False

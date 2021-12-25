@@ -313,10 +313,10 @@ class Socialist_Governments(PlayableEvent):
 
         # ???
         return False
-        
 
-NAME_TO_PLAYABLE = {'Duck and Cover', Duck_and_Cover,
-                    'Five Year Plan', Five_Year_Plan,
+
+NAME_TO_PLAYABLE = {'Duck and Cover': Duck_and_Cover,
+                    'Five Year Plan': Five_Year_Plan,
                     }
 
 
@@ -324,7 +324,10 @@ def attach_playable_events(cards):
 
     for card in cards:
 
-        card.event = NAME_TO_PLAYABLE[card.name]
+        try:
+            card.event = NAME_TO_PLAYABLE[card.name]
+        except KeyError:
+            card.event = None
 
 
 attach_playable_events(EARLY_WAR_CARDS)
