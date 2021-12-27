@@ -22,6 +22,9 @@ class GameState:
 
         # various flags for card events
         self.IRON_LADY_PLAYED = False
+        self.USSR_SEASIA_BONUS_OP = False
+        self.CAMP_DAVID_ACCORDS_PLAYED = False
+        self.WARSAW_PACT_PLAYED = False
 
 
     def begin_game(self):
@@ -48,6 +51,11 @@ class GameState:
         self.draw_pile = Pile(cards, 'Draw', self.discard_pile)
         
         self.begin_game()
+
+
+    def reset_turn_only_flags(self):
+        '''Reset all flags that only last a turn.'''
+        self.USSR_SEASIA_BONUS_OP = False
 
 
 def expand_coup_actions(card, game_state, player, action_type='COUP'):

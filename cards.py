@@ -3,6 +3,8 @@
 import random
 from enum import Enum
 
+from utils import D6
+
 class CardType(Enum):
     china_card = -1
     scoring = 0
@@ -175,6 +177,17 @@ class Pile:
         return f'{self.name} pile containing {len(self.cards)} cards.'
 
 
+def check_game_end(gamestate):
+
+    if gamestate.score > 20 or gamestate.score < -20:
+        return True
+
+    if gamestate.defcon.defcon_level == 1:
+        return True
+
+    return False
+
+
 def Duck_and_Cover(gamestate):
     ''''Degrade the DEFCON level by 1. The US receives VP equal to 5 minus the current DEFCON level.'''
     
@@ -205,8 +218,11 @@ def Five_Year_Plan(gamestate):
 
     discard = gamestate.ussr_player.discard_at_random()
 
-    if discard and discard.alignment == EventAlignment.ussr:
-        result = discard.event(gamestate)
+    if discard:
+        if discard.alignment == EventAlignment.us:
+            result = discard.event.func(gamestate)
+        else:
+            return False
     else:
         return False
 
@@ -214,9 +230,11 @@ def Five_Year_Plan(gamestate):
 
 
 def Socialist_Governments(gamestate):
-    '''Remove a total of 3 US Influence from any countries in Western Europe (removing no more than 2 Influence per country). This Event cannot be used after the “#83 – The Iron Lady” Event has been played.'''
+    '''Remove a total of 3 US Influence from any countries in Western Europe (removing no 
+    more than 2 Influence per country). This Event cannot be used after the 
+    “#83 – The Iron Lady” Event has been played.
 
-    '''Execute Socialist Governments Event.
+    Execute Socialist Governments Event.
     0) Check for IRON_LADY_PLAYED flag.
     1) Allow USSR to remove 3 US influence anywhere in Western Europe, no more than 2 per
     '''
@@ -229,39 +247,189 @@ def Socialist_Governments(gamestate):
 
 
 def Fidel(gamestate):
-    pass
+    '''Remove all US Influence from Cuba. USSR adds sufficient Influence in Cuba for Control.
+
+    Execute Fidel Event.
+    1) Set Cuba US influence to 0
+    2) Set Cuba USSR influence = Stability
+    '''
+
+    cuba = gamestate.map['Cuba']
+
+    cuba.us_influence = 0
+    cuba.ussr_influence = cuba.stability
+
+    return False
 
 
 def Vietnam_Revolts(gamestate):
-    pass
+    '''Add 2 USSR Influence to Vietnam. For the remainder of the turn, the USSR receives 
+    +1 Operations to the Operations value of a card that uses all its Operations in 
+    Southeast Asia.
+
+    Execute Vietnam Revolts Event.
+    1) Add 2 USSR influence to Vietnam.
+    2) Set USSR_SEASIA_BONUS_OP flag.'''
+
+    gamestate.map['Vietnam'].ussr_influence += 2
+    gamestate.USSR_SEASIA_BONUS_OP = True
+
+    return False
 
 
 def Blockade(gamestate):
-    pass
+    '''Unless the US immediately discards a card with an Operations value of 3 or more, 
+    remove all US Influence from West Germany.
+
+    Execute Blockade Event.
+    1) Check if US has any =>3 Ops cards
+        a) If yes, they must decide which to discard (if any)
+        b) If no or fail to, set WG US Influence to 0'''
+
+    west_germany = gamestate.map['West Germany']
+    
+    if not any(card.ops_value >= 3 for card in gamestate.us_player.hand):
+
+        west_germany.us_influence = 0
+
+    else:
+        # TODO: what.
+        #raise_choice()
+        pass
+
+    return False
 
 
 def Korean_War(gamestate):
-    pass
+    '''North Korea invades South Korea. Roll a die and subtract (-1) from the die roll 
+    for every US controlled country adjacent to South Korea. On a modified die roll 
+    of 4-6, the USSR receives 2 VP and replaces all US Influence in South Korea with 
+    USSR Influence. The USSR adds 2 to its Military Operations Track.
+
+    Execute Korean War Event.
+    1) Calulate modifier (-1 for each adjacent US controlled country)
+    2) Check for success
+        a) if so, +2 VPs, replace US inf with USSR inf (set US to 0)
+        b) if fail, do nothing
+    3) Add 2 to USSR Mil Ops'''
+
+    south_korea = gamestate.map['South Korea']
+
+    modifier = 0
+
+    for neighbor in south_korea.neighbors:
+        if neighbor.controlled_by == SuperPower.us:
+            modifier -= 1
+
+    roll_result = D6.roll() + modifier
+
+    if roll_result >= 4:
+
+        gamestate.score += 2
+        us_inf = south_korea.us_influence
+        south_korea.ussr_influence += us_inf
+        south_korea.us_influence = 0
+
+    gamestate.ussr_player.mil_ops += 2
+
+    return False
+
 
 
 def Romanian_Abdication(gamestate):
-    pass
+    '''Remove all US Influence from Romania. The USSR adds sufficient Influence to 
+    Romania for Control.'''
+
+    romania = gamestate.map['Romania']
+
+    romania.us_influence = 0
+    romania.ussr_influence = romania.stability
+
+    return False
 
 
 def Arab_Israeli_War(gamestate):
-    pass
+    '''Pan-Arab Coalition invades Israel. Roll a die and subtract (-1) from the die roll 
+    for Israel, if it is US controlled, and for every US controlled country adjacent 
+    to Israel. On a modified die roll of 4-6, the USSR receives 2 VP and replaces all 
+    US Influence in Israel with USSR Influence. The USSR adds 2 to its Military 
+    Operations Track. This Event cannot be used after the “#65 – Camp David Accords” Event 
+    has been played.
+
+    Execute Arab-Israeli War Event.
+    0) Fail if CAMP_DAVID_ACCORDS_PLAYED flag is set
+    1) Calculate modifier (-1 for US control of Israel and adjacent countries)
+    2) Check for success'''
+
+    if gamestate.CAMP_DAVID_ACCORDS_PLAYED:
+        return False
+
+    israel = gamestate.map['Israel']
+
+    modifier = 0
+
+    if israel.controlled_by == SuperPower.us:
+        modifier -= 1
+    for neighbor in israel.neighbors:
+        if neighbor.controlled_by == SuperPower.us:
+            modifier -= 1
+
+    roll_result = D6.roll() + modifier
+
+    if roll_result >= 4:
+
+        gamestate.score += 2
+        us_inf = israel.us_influence
+        israel.ussr_influence += us_inf
+        israel.us_influence = 0
+
+    gamestate.ussr_player.mil_ops += 2
+
+    return False                 
 
 
 def Comecon(gamestate):
+    '''Add 1 USSR Influence to each of 4 non-US controlled countries of Eastern Europe.
+    
+    Execute Comecon Event.'''
+
+    # TODO: more of this
+    #raise_choice()
+
     pass
 
 
 def Nasser(gamestate):
-    pass
+    '''Add 2 USSR Influence to Egypt. The US removes half, rounded up, of its 
+    Influence from Egypt.'''
+
+    egypt = gamestate.map['Egypt']
+
+    egypt.ussr_influence += 2
+    us_inf = egypt.us_influence
+    egypt.us_influence -= us_inf // 2
+
+    return False
 
 
 def Warsaw_Pact_Formed(gamestate):
-    pass
+    '''Remove all US influence from 4 countries in Eastern Europe or add 5 USSR 
+    Influence to any countries in Eastern Europe (adding no more than 2 Influence
+    per country). This Event allows the “#21 – NATO” card to be played as an Event.
+
+    Execute Warsaw Pact Formed Event.
+    0) Set WARSAW_PACT_PLAYED flag
+    1) USSR player either
+        a) Removes all US influence from 4 Eastern European countries
+        b) Adds 5 USSR influence, no more than 2 per, in Eastern European countries
+    '''
+
+    gamestate.WARSAW_PACT_PLAYED = True
+
+    # TODO: how
+    #raise_choice()
+
+    return False
 
 
 def De_Gaulle_Leads_France(gamestate):
@@ -349,7 +517,7 @@ EARLY_WAR_CARDS = (ScoringCard('asia'),
                    Event('Fidel', Fidel, 2, 'ussr', 'Remove all US Influence from Cuba. USSR adds sufficient Influence in Cuba for Control.', True),
                    Event('Vietnam Revolts', Vietnam_Revolts, 2, 'ussr', 'Add 2 USSR Influence to Vietnam. For the remainder of the turn, the USSR receives +1 Operations to the Operations value of a card that uses all its Operations in Southeast Asia.', True),
                    Event('Blockade', Blockade, 1, 'ussr', 'Unless the US immediately discards a card with an Operations value of 3 or more, remove all US Influence from West Germany.', True),
-                   Event('Korean War', Korean_War, 2, 'ussr', ' North Korea invades South Korea. Roll a die and subtract (-1) from the die roll for every US controlled country adjacent to South Korea. On a modified die roll of 4-6, the USSR receives 2 VP and replaces all US Influence in South Korea with USSR Influence. The USSR adds 2 to its Military Operations Track.', True),
+                   Event('Korean War', Korean_War, 2, 'ussr', 'North Korea invades South Korea. Roll a die and subtract (-1) from the die roll for every US controlled country adjacent to South Korea. On a modified die roll of 4-6, the USSR receives 2 VP and replaces all US Influence in South Korea with USSR Influence. The USSR adds 2 to its Military Operations Track.', True),
                    Event('Romanian Abdication', Romanian_Abdication, 1, 'ussr', 'Remove all US Influence from Romania. The USSR adds sufficient Influence to Romania for Control.', True),
                    Event('Arab-Israeli War', Arab_Israeli_War, 2, 'ussr', 'Pan-Arab Coalition invades Israel. Roll a die and subtract (-1) from the die roll for Israel, if it is US controlled, and for every US controlled country adjacent to Israel. On a modified die roll of 4-6, the USSR receives 2 VP and replaces all US Influence in Israel with USSR Influence. The USSR adds 2 to its Military Operations Track. This Event cannot be used after the “#65 – Camp David Accords” Event has been played.'),
                    Event('Comecon', Comecon, 3, 'ussr', 'Add 1 USSR Influence to each of 4 non-US controlled countries of Eastern Europe.', True),

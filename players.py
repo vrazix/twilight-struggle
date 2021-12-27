@@ -14,6 +14,14 @@ class Player:
         self.hand = list()
         self.china_card = 0
         self.space_race = SpaceRace()
+        self.mil_ops = 0
+
+
+    def reset_turn(self):
+        '''Reset the player object for the end of the Turn.'''
+
+        self.activate_china_card()
+        self.mil_ops = 0
 
 
     def show_hand(self):
