@@ -979,6 +979,227 @@ def Cultural_Revolution(gamestate):
     pass
 
 
+@check_game_end
+def Flower_Power(gamestate):
+    '''The USSR receives 2 VP for every US played “War” card (Arab-Israeli War, Korean War, 
+    Brush War, Indo-Pakistani War, Iran-Iraq War), used for Operations or an Event, after 
+    this card is played. This Event is prevented / canceled by the “#97 – ‘An Evil Empire’” 
+    Event.'''
+
+    pass
+
+
+@check_game_end
+def U2_Incident(gamestate):
+    '''The USSR receives 1 VP. If the “#32 – UN Intervention” Event is played later this 
+    turn, either by the US or the USSR, the USSR receives an additional 1 VP.
+    '''
+
+    pass
+
+
+@check_game_end
+def OPEC(gamestate):
+    '''The USSR receives 1 VP for Control of each of the following countries: Egypt, Iran, 
+    Libya, Saudi Arabia, Iraq, Gulf States, Venezuela. This Event cannot be used after the 
+    “#86 – North Sea Oil” Event has been played.
+    '''
+
+    pass
+
+
+@check_game_end
+def Lone_Gunman(gamestate):
+    '''The US reveals their hand of cards. The USSR may use the Operations value of this 
+    card to conduct Operations.
+    '''
+
+    pass
+
+
+@check_game_end
+def Colonial_Rear_Guards(gamestate):
+    '''Add 1 US Influence to each of any 4 countries in Africa and/or Southeast Asia.
+    '''
+
+    pass
+
+
+@check_game_end
+def Panama_Canal_Returned(gamestate):
+    '''Add 1 US Influence to Panama, Costa Rica and Venezuela.
+    '''
+
+    pass
+
+
+@check_game_end
+def Camp_David_Accords(gamestate):
+    '''The US receives 1 VP and adds 1 Influence to Israel, Jordan and Egypt. This Event 
+    prevents the “#13 – Arab-Israeli War” card from being played as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def Puppet_Governments(gamestate):
+    '''The US may add 1 Influence to 3 countries that do not contain Influence from either 
+    the US or USSR.
+    '''
+
+    pass
+
+
+@check_game_end
+def Grain_Sales_to_Soviets(gamestate):
+    '''The US randomly selects 1 card from the USSR’s hand (if available). The US must 
+    either play the card or return it to the USSR. If the card is returned, or the USSR 
+    has no cards, the US may use the Operations value of this card to conduct Operations.
+    '''
+
+    pass
+
+
+@check_game_end
+def John_Paul_II(gamestate):
+    '''Remove 2 USSR Influence from Poland and add 1 US Influence to Poland. This Event 
+    allows the “#101 – Solidarity” card to be played as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def Latin_American_Death_Squads(gamestate):
+    '''All of the phasing player’s Coup Attempts in Central and South America, for the 
+    remainder of this turn, receive +1 to their die roll. All of the opponent’s Coup 
+    Attempts in Central and South America, for the remainder of this turn, receive -1 
+    to their die roll.
+    '''
+
+    pass
+
+
+@check_game_end
+def OAS_Founded(gamestate):
+    '''Add a total of 2 US Influence to any countries in Central or South America.
+    '''
+
+    pass
+
+
+@check_game_end
+def Nixon_Plays(gamestate):
+    '''If the USSR has the “#6 – The China Card” card, the USSR must give the card to 
+    the US (face down and unavailable for immediate play). If the US already has the 
+    “#6 – The China Card” card, the US receives 2 VP.
+    '''
+
+    pass
+
+
+@check_game_end
+def Sadat_Expels_Soviets(gamestate):
+    '''Remove all USSR Influence from Egypt and add 1 US Influence to Egypt.
+    '''
+
+    pass
+
+
+@check_game_end
+def Shuttle_Diplomacy(gamestate):
+    '''If this card’s Event is in effect, subtract (-1) a Battleground country from the 
+    USSR total and then discard this card during the next scoring of the Middle East or 
+    Asia (which ever comes first).
+    '''
+
+    pass
+
+
+@check_game_end
+def VOA(gamestate):
+    '''Remove 4 USSR Influence from any countries NOT in Europe (removing no more than 2 
+    Influence per country).
+    '''
+
+    pass
+
+
+@check_game_end
+def Liberation_Theology(gamestate):
+    '''Add a total of 3 USSR Influence to any countries in Central America (adding no more 
+    than 2 Influence per country).
+    '''
+
+    pass
+
+
+@check_game_end
+def Ussuri_River_Skirmish(gamestate):
+    '''If the USSR has the “#6 – The China Card” card, the USSR must give the card to the 
+    US (face up and available for play). If the US already has the “#6 – The China Card” 
+    card, add a total of 4 US Influence to any countries in Asia (adding no more than 2 
+    Influence per country).
+    '''
+
+    pass
+
+
+@check_game_end
+def Ask_Not(gamestate):
+    '''The US may discard up to their entire hand of cards (including scoring cards) to 
+    the discard pile and draw replacements from the draw pile. The number of cards to be 
+    discarded must be decided before drawing any replacement cards from the draw pile.
+    '''
+
+    pass
+
+
+@check_game_end
+def Alliance_for_Progress(gamestate):
+    '''The US receives 1 VP for each US controlled Battleground country in Central and 
+    South America.
+    '''
+
+    pass
+
+
+@check_game_end
+def One_Small_Step(gamestate):
+    '''If you are behind on the Space Race Track, the player uses this Event to move their 
+    marker 2 spaces forward on the Space Race Track. The player receives VP only from the 
+    final space moved into.
+    '''
+
+    pass
+
+
+@check_game_end
+def Che(gamestate):
+    '''The USSR may perform a Coup Attempt, using this card’s Operations value, against a 
+    non-Battleground country in Central America, South America or Africa. The USSR may 
+    perform a second Coup Attempt, against a different non-Battleground country in Central 
+    America, South America or Africa, if the first Coup Attempt removed any US Influence 
+    from the target country.
+    '''
+
+    pass
+
+
+@check_game_end
+def Our_Man_in_Tehran(gamestate):
+    '''If the US controls at least one Middle East country, the US player uses this Event 
+    to draw the top 5 cards from the draw pile. The US may discard any or all of the drawn 
+    cards, after revealing the discarded card(s) to the USSR player, without triggering 
+    the Event(s). Any remaining drawn cards are returned to the draw pile and the draw 
+    pile is reshuffled.
+    '''
+
+    pass
+
+
+
 MID_WAR_CARDS = (Event('Brush War', Brush_War, 3, 'neutral', 'The player attacks any country with a stability number of 1 or 2. Roll a die and subtract (-1) from the die roll for every adjacent enemy controlled country. On a modified die roll of 3-6, the player receives 1 VP and replaces all the opponent’s Influence in the target country with their Influence. The player adds 3 to its Military Operations Track.'),
                  ScoringCard('central_am'),
                  ScoringCard('southeast_asia'),
@@ -1001,10 +1222,272 @@ MID_WAR_CARDS = (Event('Brush War', Brush_War, 3, 'neutral', 'The player attacks
                  Event('Willy Brandt', Willy_Brandt, 2, 'ussr', 'The USSR receives 1 VP and adds 1 Influence to West Germany. This Event cancels the effect(s) of the “#21 – NATO” Event for West Germany only. This Event is prevented / canceled by the “#96 – Tear Down this Wall” Event.', True),
                  Event('Muslim Revolution', Muslim_Revolution, 4, 'ussr', 'Remove all US Influence from 2 of the following countries: Sudan, Iran, Iraq, Egypt, Libya, Saudi Arabia, Syria, Jordan. This Event cannot be used after the “#110 – AWACS Sale to Saudis” Event has been played.'),
                  Event('ABM Treaty', ABM_Treaty, 4, 'neutral', 'Improve the DEFCON level by 1 and then conduct Operations using the Operations value of this card.'),
-                 Event('Cultural Revolution', Cultural_Revolution, 3, 'If the US has the “#6 – The China Card” card, the US must give the card to the USSR (face up and available to be played). If the USSR already has “#6 – The China Card” card, the USSR receives 1 VP.', True),
+                 Event('Cultural Revolution', Cultural_Revolution, 3, 'ussr', 'If the US has the “#6 – The China Card” card, the US must give the card to the USSR (face up and available to be played). If the USSR already has “#6 – The China Card” card, the USSR receives 1 VP.', True),
+                 Event('Flower Power', Flower_Power, 4, 'ussr', 'The USSR receives 2 VP for every US played “War” card (Arab-Israeli War, Korean War, Brush War, Indo-Pakistani War, Iran-Iraq War), used for Operations or an Event, after this card is played. This Event is prevented / canceled by the “#97 – ‘An Evil Empire’” Event.', True),
+                 Event('U2 Incident', U2_Incident, 3, 'ussr', 'The USSR receives 1 VP. If the “#32 – UN Intervention” Event is played later this turn, either by the US or the USSR, the USSR receives an additional 1 VP.', True),
+                 Event('OPEC', OPEC, 3, 'ussr', 'The USSR receives 1 VP for Control of each of the following countries: Egypt, Iran, Libya, Saudi Arabia, Iraq, Gulf States, Venezuela. This Event cannot be used after the “#86 – North Sea Oil” Event has been played.'),
+                 Event('"Lone Gunman"', Lone_Gunman, 1, 'ussr', 'The US reveals their hand of cards. The USSR may use the Operations value of this card to conduct Operations.', True),
+                 Event('Colonial Rear Guards', Colonial_Rear_Guards, 2, 'us', 'Add 1 US Influence to each of any 4 countries in Africa and/or Southeast Asia.'),
+                 Event('Panama Canal Returned', Panama_Canal_Returned, 1, 'us', 'Add 1 US Influence to Panama, Costa Rica and Venezuela.', True),
+                 Event('Camp David Accords', Camp_David_Accords, 2, 'us', 'The US receives 1 VP and adds 1 Influence to Israel, Jordan and Egypt. This Event prevents the “#13 – Arab-Israeli War” card from being played as an Event.', True),
+                 Event('Puppet Governments', Puppet_Governments, 2, 'us', 'The US may add 1 Influence to 3 countries that do not contain Influence from either the US or USSR.', True),
+                 Event('Grain Sales to Soviets', Grain_Sales_to_Soviets, 2, 'us', 'The US randomly selects 1 card from the USSR’s hand (if available). The US must either play the card or return it to the USSR. If the card is returned, or the USSR has no cards, the US may use the Operations value of this card to conduct Operations.'),
+                 Event('John Paul II Elected Pope', John_Paul_II, 2, 'us', 'Remove 2 USSR Influence from Poland and add 1 US Influence to Poland. This Event allows the “#101 – Solidarity” card to be played as an Event.', True),
+                 Event('Latin American Death Squads', Latin_American_Death_Squads, 2, 'neutral', 'All of the phasing player’s Coup Attempts in Central and South America, for the remainder of this turn, receive +1 to their die roll. All of the opponent’s Coup Attempts in Central and South America, for the remainder of this turn, receive -1 to their die roll.'),
+                 Event('OAS Founded', OAS_Founded, 1, 'us', 'Add a total of 2 US Influence to any countries in Central or South America.', True),
+                 Event('Nixon Plays the China Card', Nixon_Plays, 2, 'us', 'If the USSR has the “#6 – The China Card” card, the USSR must give the card to the US (face down and unavailable for immediate play). If the US already has the “#6 – The China Card” card, the US receives 2 VP.', True),
+                 Event('Sadat Expels Soviets', Sadat_Expels_Soviets, 1, 'us', 'Remove all USSR Influence from Egypt and add 1 US Influence to Egypt.', True),
+                 Event('Shuttle Diplomacy', Shuttle_Diplomacy, 3, 'us', 'If this card’s Event is in effect, subtract (-1) a Battleground country from the USSR total and then discard this card during the next scoring of the Middle East or Asia (which ever comes first).'),
+                 Event('The Voice of America', VOA, 2, 'us', 'Remove 4 USSR Influence from any countries NOT in Europe (removing no more than 2 Influence per country).'),
+                 Event('Liberation Theology', Liberation_Theology, 2, 'ussr', 'Add a total of 3 USSR Influence to any countries in Central America (adding no more than 2 Influence per country).'),
+                 Event('Ussuri River Skirmish', Ussuri_River_Skirmish, 3, 'us', 'If the USSR has the “#6 – The China Card” card, the USSR must give the card to the US (face up and available for play). If the US already has the “#6 – The China Card” card, add a total of 4 US Influence to any countries in Asia (adding no more than 2 Influence per country).', True),
+                 Event('Ask Not What Your Country...', Ask_Not, 3, 'us', 'The US may discard up to their entire hand of cards (including scoring cards) to the discard pile and draw replacements from the draw pile. The number of cards to be discarded must be decided before drawing any replacement cards from the draw pile.', True),
+                 Event('Alliance for Progress', Alliance_for_Progress, 3, 'us', 'The US receives 1 VP for each US controlled Battleground country in Central and South America.', True),
+                 ScoringCard('africa'),
+                 Event('"One Small Step..."', One_Small_Step, 2, 'neutral', 'If you are behind on the Space Race Track, the player uses this Event to move their marker 2 spaces forward on the Space Race Track. The player receives VP only from the final space moved into.'),
+                 ScoringCard('south_am'),
+                 Event('Che', Che, 3, 'ussr', 'The USSR may perform a Coup Attempt, using this card’s Operations value, against a non-Battleground country in Central America, South America or Africa. The USSR may perform a second Coup Attempt, against a different non-Battleground country in Central America, South America or Africa, if the first Coup Attempt removed any US Influence from the target country.'),
+                 Event('Our Man in Tehran', Our_Man_in_Tehran, 2, 'us', 'If the US controls at least one Middle East country, the US player uses this Event to draw the top 5 cards from the draw pile. The US may discard any or all of the drawn cards, after revealing the discarded card(s) to the USSR player, without triggering the Event(s). Any remaining drawn cards are returned to the draw pile and the draw pile is reshuffled.', True),
                  )
 
 #print(EARLY_WAR_CARDS)
+
+
+@check_game_end
+def Iranian_Hostage_Crisis(gamestate):
+    '''Remove all US Influence and add 2 USSR Influence to Iran. This card’s Event requires 
+    the US to discard 2 cards, instead of 1 card, if the “#92 – Terrorism” Event is played.
+    '''
+
+    pass
+
+
+@check_game_end
+def The_Iron_Lady(gamestate):
+    '''Add 1 USSR Influence to Argentina and remove all USSR Influence from the United 
+    Kingdom. The US receives 1 VP. This Event prevents the “#7 – Socialist Governments” 
+    card from being played as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def Reagan_Bombs_Libya(gamestate):
+    '''The US receives 1 VP for every 2 USSR Influence in Libya.
+    '''
+
+    pass
+
+
+@check_game_end
+def Star_Wars(gamestate):
+    '''If the US is ahead on the Space Race Track, the US player uses this Event to look 
+    through the discard pile, pick any 1 non-scoring card and play it immediately as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def North_Sea_Oil(gamestate):
+    '''The US may play 8 cards (in 8 action rounds) for this turn only. This Event 
+    prevents the “#61 – OPEC” card from being played as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def The_Reformer(gamestate):
+    '''Add 4 USSR Influence to Europe (adding no more than 2 Influence per country). 
+    If the USSR is ahead of the US in VP, 6 Influence may be added to Europe instead. 
+    The USSR may no longer make Coup Attempts in Europe.
+    '''
+
+    pass
+
+
+@check_game_end
+def Marine_Barracks_Bombing(gamestate):
+    '''Remove all US Influence in Lebanon and remove a total of 2 US Influence from 
+    any countries in the Middle East.
+    '''
+
+    pass
+
+
+@check_game_end
+def Soviets_Shoot_Down(gamestate):
+    '''Degrade the DEFCON level by 1 and the US receives 2 VP. The US may place influence 
+    or make Realignment rolls, using this card, if South Korea is US controlled.
+    '''
+
+    pass
+
+
+@check_game_end
+def Glasnost(gamestate):
+    '''Improve the DEFCON level by 1 and the USSR receives 2 VP. The USSR may make 
+    Realignment rolls or add Influence, using this card, if the “#87 – The Reformer” 
+    Event has already been played.
+    '''
+
+    pass
+
+
+@check_game_end
+def Ortega_Elected(gamestate):
+    '''Remove all US Influence from Nicaragua. The USSR may make a free Coup Attempt, 
+    using this card’s Operations value, in a country adjacent to Nicaragua.
+    '''
+
+    pass
+
+
+@check_game_end
+def Terrorism(gamestate):
+    '''The player’s opponent must randomly discard 1 card from their hand. If the 
+    “#82 – Iranian Hostage Crisis” Event has already been played, a US player 
+    (if applicable) must randomly discard 2 cards from their hand.
+    '''
+
+    pass
+
+
+@check_game_end
+def Iran_Contra_Scandal(gamestate):
+    '''All US Realignment rolls, for the remainder of this turn, receive -1 to their die roll.
+    '''
+
+    pass
+
+
+@check_game_end
+def Chernobyl(gamestate):
+    '''The US must designate a single Region (Europe, Asia, etc.) that, for the remainder of 
+    the turn, the USSR cannot add Influence to using Operations points.
+    '''
+
+    pass
+
+
+@check_game_end
+def Latin_American_Debt_Crisis(gamestate):
+    '''The US must immediately discard a card with an Operations value of 3 or more or the 
+    USSR may double the amount of USSR Influence in 2 countries in South America.
+    '''
+
+    pass
+
+
+@check_game_end
+def Tear_Down_this_Wall(gamestate):
+    '''Add 3 US Influence to East Germany. The US may make free Coup Attempts or Realignment 
+    rolls in Europe using the Operations value of this card. This Event prevents / cancels 
+    the effect(s) of the “#55 – Willy Brandt” Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def An_Evil_Empire(gamestate):
+    '''The US receives 1 VP. This Event prevents / cancels the effect(s) of the 
+    “#59 – Flower Power” Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def Aldrich_Ames_Remix(gamestate):
+    '''The US reveals their hand of cards, face-up, for the remainder of the turn and the USSR discards a card from the US hand.
+    '''
+
+    pass
+
+
+@check_game_end
+def Pershing_II_Deployed(gamestate):
+    '''The USSR receives 1 VP. Remove 1 US Influence from any 3 countries in Western Europe.
+    '''
+
+    pass
+
+
+@check_game_end
+def Wargames(gamestate):
+    '''If the DEFCON level is 2, the player may immediately end the game after giving their 
+    opponent 6 VP. How about a nice game of chess?
+    '''
+
+    pass
+
+
+@check_game_end
+def Solidarity(gamestate):
+    '''Add 3 US Influence to Poland. This card requires prior play of the 
+    “#68 – John Paul II Elected Pope” Event in order to be played as an Event.
+    '''
+
+    pass
+
+
+@check_game_end
+def Iran_Iraq_War(gamestate):
+    '''Iran invades Iraq or vice versa (player’s choice). Roll a die and subtract (-1) 
+    from the die roll for every enemy controlled country adjacent to the target of the 
+    invasion (Iran or Iraq). On a modified die roll of 4-6, the player receives 2 VP 
+    and replaces all the opponent’s Influence in the target country with their Influence. 
+    The player adds 2 to its Military Operations Track.
+    '''
+
+    pass
+
+
+@check_game_end
+def Yuri_and_Samantha(gamestate):
+    '''The USSR receives 1 VP for each US Coup Attempt performed during the remainder 
+    of the Turn.
+    '''
+
+    pass
+
+
+@check_game_end
+def AWACS(gamestate):
+    '''Add 2 US Influence to Saudi Arabia. This Event prevents the “#56 – Muslim Revolution” 
+    card from being played as an Event.
+    '''
+
+    pass
+
+
+LATE_WAR_CARDS = (Event('Iranian Hostage Crisis', Iranian_Hostage_Crisis, 3, 'ussr', 'Remove all US Influence and add 2 USSR Influence to Iran. This card’s Event requires the US to discard 2 cards, instead of 1 card, if the “#92 – Terrorism” Event is played.', True),
+                  Event('The Iron Lady', The_Iron_Lady, 3, 'us', 'Add 1 USSR Influence to Argentina and remove all USSR Influence from the United Kingdom. The US receives 1 VP. This Event prevents the “#7 – Socialist Governments” card from being played as an Event.', True),
+                  Event('Reagan Bombs Libya', Reagan_Bombs_Libya, 2, 'us', 'The US receives 1 VP for every 2 USSR Influence in Libya.', True),
+                  Event('Star Wars', Star_Wars, 2, 'us', 'If the US is ahead on the Space Race Track, the US player uses this Event to look through the discard pile, pick any 1 non-scoring card and play it immediately as an Event.', True),
+                  Event('North Sea Oil', North_Sea_Oil, 3, 'us', 'The US may play 8 cards (in 8 action rounds) for this turn only. This Event prevents the “#61 – OPEC” card from being played as an Event.', True),
+                  Event('The Reformer', The_Reformer, 3, 'ussr', 'Add 4 USSR Influence to Europe (adding no more than 2 Influence per country). If the USSR is ahead of the US in VP, 6 Influence may be added to Europe instead. The USSR may no longer make Coup Attempts in Europe.', True),
+                  Event('Marine Barracks Bombing', Marine_Barracks_Bombing, 2, 'ussr', 'Remove all US Influence in Lebanon and remove a total of 2 US Influence from any countries in the Middle East.', True),
+                  Event('Soviets Shoot Down KAL-007', Soviets_Shoot_Down, 4, 'us', 'Degrade the DEFCON level by 1 and the US receives 2 VP. The US may place influence or make Realignment rolls, using this card, if South Korea is US controlled.', True),
+                  Event('Glasnost', Glasnost, 4, 'ussr', 'Improve the DEFCON level by 1 and the USSR receives 2 VP. The USSR may make Realignment rolls or add Influence, using this card, if the “#87 – The Reformer” Event has already been played.', True),
+                  Event('Ortega Elected in Nicaragua', Ortega_Elected, 2, 'ussr', 'Remove all US Influence from Nicaragua. The USSR may make a free Coup Attempt, using this card’s Operations value, in a country adjacent to Nicaragua.', True),
+                  Event('Terrorism', Terrorism, 2, 'neutral', 'The player’s opponent must randomly discard 1 card from their hand. If the “#82 – Iranian Hostage Crisis” Event has already been played, a US player (if applicable) must randomly discard 2 cards from their hand.'),
+                  Event('Iran-Contra Scandal', Iran_Contra_Scandal, 2, 'ussr', 'All US Realignment rolls, for the remainder of this turn, receive -1 to their die roll.', True),
+                  Event('Chernobyl', Chernobyl, 3, 'us', 'The US must designate a single Region (Europe, Asia, etc.) that, for the remainder of the turn, the USSR cannot add Influence to using Operations points.', True),
+                  Event('Latin American Debt Crisis', Latin_American_Debt_Crisis, 2, 'ussr', 'The US must immediately discard a card with an Operations value of 3 or more or the USSR may double the amount of USSR Influence in 2 countries in South America.'),
+                  Event('Tear Down this Wall', Tear_Down_this_Wall, 3, 'us', 'Add 3 US Influence to East Germany. The US may make free Coup Attempts or Realignment rolls in Europe using the Operations value of this card. This Event prevents / cancels the effect(s) of the “#55 – Willy Brandt” Event.', True),
+                  Event('"An Evil Empire"', An_Evil_Empire, 3, 'us', 'The US receives 1 VP. This Event prevents / cancels the effect(s) of the “#59 – Flower Power” Event.', True),
+                  Event('Aldrich Ames Remix', Aldrich_Ames_Remix, 3, 'ussr', 'The US reveals their hand of cards, face-up, for the remainder of the turn and the USSR discards a card from the US hand.', True),
+                  Event('Pershing II Deployed', Pershing_II_Deployed, 3, 'ussr', 'The USSR receives 1 VP. Remove 1 US Influence from any 3 countries in Western Europe.', True),
+                  Event('Wargames', Wargames, 4, 'neutral', 'If the DEFCON level is 2, the player may immediately end the game after giving their opponent 6 VP. How about a nice game of chess?', True),
+                  Event('Solidarity', Solidarity, 2, 'us', 'Add 3 US Influence to Poland. This card requires prior play of the “#68 – John Paul II Elected Pope” Event in order to be played as an Event.', True),
+                  Event('Iran-Iraq War', Iran_Iraq_War, 2, 'neutral', 'Iran invades Iraq or vice versa (player’s choice). Roll a die and subtract (-1) from the die roll for every enemy controlled country adjacent to the target of the invasion (Iran or Iraq). On a modified die roll of 4-6, the player receives 2 VP and replaces all the opponent’s Influence in the target country with their Influence. The player adds 2 to its Military Operations Track.', True),
+                  Event('Yuri and Samantha', Yuri_and_Samantha, 2, 'ussr', 'The USSR receives 1 VP for each US Coup Attempt performed during the remainder of the Turn.', True),
+                  Event('AWACS Sale to Saudis', AWACS, 3, 'us', 'Add 2 US Influence to Saudi Arabia. This Event prevents the “#56 – Muslim Revolution” card from being played as an Event.', True),
+                  )
 
 
 class PlayableEvent:
