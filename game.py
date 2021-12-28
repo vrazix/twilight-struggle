@@ -19,12 +19,22 @@ class GameState:
         self.ussr_player = ussr_player
         self.score = 0
         self.defcon = Defcon()
+        self.turn = 0 # 0 for setup, otherwise actual
+        self.action_round = 0 # 0 for headline, otherwise actual
 
         # various flags for card events
         self.IRON_LADY_PLAYED = False
         self.USSR_SEASIA_BONUS_OP = False
         self.CAMP_DAVID_ACCORDS_PLAYED = False
         self.WARSAW_PACT_PLAYED = False
+        self.DEGAULLE_PLAYED = False
+        self.MARSHALL_PLAN_PLAYED = False
+        self.NATO_PLAYED = False
+        self.CONTAINMENT = False
+        self.US_JAPAN_MUTUAL = False
+        self.RED_SCARE = False
+        self.RED_PURGE = False
+        self.NORAD_ACTIVE = False
 
 
     def begin_game(self):
@@ -56,6 +66,9 @@ class GameState:
     def reset_turn_only_flags(self):
         '''Reset all flags that only last a turn.'''
         self.USSR_SEASIA_BONUS_OP = False
+        self.CONTAINMENT = False
+        self.RED_PURGE = False
+        self.RED_SCARE = False
 
 
 def expand_coup_actions(card, game_state, player, action_type='COUP'):
