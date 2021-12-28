@@ -781,6 +781,229 @@ EARLY_WAR_CARDS = (ScoringCard('asia'),
                    Event('NORAD', NORAD, 3, 'us', 'Add 1 US Influence to a single country containing US Influence, at the end of each Action Round, if Canada is US-controlled and the DEFCON level moved to 2 during that Action Round. This Event is canceled by the “#42 – Quagmire” Event.'),
                    )
 
+
+@check_game_end
+def Brush_War(gamestate):
+    '''The player attacks any country with a stability number of 1 or 2. 
+    Roll a die and subtract (-1) from the die roll for every adjacent enemy controlled 
+    country. On a modified die roll of 3-6, the player receives 1 VP and replaces all 
+    the opponent’s Influence in the target country with their Influence. The player 
+    adds 3 to its Military Operations Track.'''
+
+    pass
+
+
+@check_game_end
+def Arms_Race(gamestate):
+    '''Compare each player’s value on the Military Operations Track. If the phasing 
+    player has a higher value than their opponent on the Military Operations Track, 
+    that player receives 1 VP. If the phasing player has a higher value than their 
+    opponent, and has met the “required” amount, on the Military Operations Track, 
+    that player receives 3 VP instead.'''
+
+    pass
+
+
+@check_game_end
+def Cuban_Missile_Crisis(gamestate):
+    '''Set the DEFCON level to 2. Any Coup Attempts by your opponent, for the remainder 
+    of this turn, will result in Global Thermonuclear War. Your opponent will lose the game. 
+    This card’s Event may be canceled, at any time, if the USSR removes 2 Influence from 
+    Cuba or the US removes 2 Influence from West Germany or Turkey.'''
+
+    pass
+
+
+@check_game_end
+def Nuclear_Subs(gamestate):
+    '''US Operations used for Coup Attempts in Battleground countries, for the remainder 
+    of this turn, do not degrade the DEFCON level. This card’s Event does not apply to 
+    any Event that would affect the DEFCON level (ex. the “#40 – Cuban Missile Crisis” Event).
+    '''
+
+    pass
+
+
+@check_game_end
+def Quagmire(gamestate):
+    '''On the US’s next action round, it must discard an Operations card with a value of 2 
+    or more and roll 1-4 on a die to cancel this Event. Repeat this Event for each US action 
+    round until the US successfully rolls 1-4 on a die. If the US is unable to discard an 
+    Operations card, it must play all of its scoring cards and then skip each action round 
+    for the rest of the turn. This Event cancels the effect(s) of the “#106 – NORAD” Event 
+    (if applicable).'''
+
+    pass
+
+
+@check_game_end
+def SALT_Negotiations(gamestate):
+    '''Improve the DEFCON level by 2. For the remainder of the turn, both players receive -1 
+    to all Coup Attempt rolls. The player of this card’s Event may look through the discard 
+    pile, pick any 1 non-scoring card, reveal it to their opponent and then place the drawn 
+    card into their hand.'''
+
+    pass
+
+
+@check_game_end
+def Bear_Trap(gamestate):
+    '''On the USSR’s next action round, it must discard an Operations card with a value of 2 
+    or more and roll 1-4 on a die to cancel this Event. Repeat this Event for each USSR action 
+    round until the USSR successfully rolls 1-4 on a die. If the USSR is unable to discard an 
+    Operations card, it must play all of its scoring cards and then skip each action round for 
+    the rest of the turn.'''
+
+    pass
+
+
+@check_game_end
+def Summit(gamestate):
+    '''Both players roll a die. Each player receives +1 to the die roll for each Region 
+    (Europe, Asia, etc.) they Dominate or Control. The player with the highest modified die 
+    roll receives 2 VP and may degrade or improve the DEFCON level by 1 (do not reroll ties).
+    '''
+
+    pass
+
+
+@check_game_end
+def How_I_Learned(gamestate):
+    '''Set the DEFCON level to any level desired (1-5). The player adds 5 to its Military 
+    Operations Track.
+    '''
+
+    pass
+
+
+@check_game_end
+def Junta(gamestate):
+    '''Add 2 Influence to a single country in Central or South America. The player may 
+    make free Coup Attempts or Realignment rolls in either Central or South America using 
+    the Operations value of this card.'''
+
+    pass
+
+
+@check_game_end
+def Kitchen_Debates(gamestate):
+    '''If the US controls more Battleground countries than the USSR, the US player uses this 
+    Event to poke their opponent in the chest and receive 2 VP!'''
+
+    pass
+
+
+@check_game_end
+def Missile_Envy(gamestate):
+    '''Exchange this card for your opponent’s highest value Operations card. If 2 or more 
+    cards are tied, opponent chooses. If the exchanged card contains an Event applicable to 
+    yourself or both players, it occurs immediately. If it contains an opponent’s Event, 
+    use the Operations value (no Event). The opponent must use this card for Operations 
+    during their next action round.'''
+
+    pass
+
+
+@check_game_end
+def We_Will_Bury_You(gamestate):
+    '''Degrade the DEFCON level by 1. Unless the #32 UN Intervention card is played as an 
+    Event on the US’s next action round, the USSR receives 3 VP.
+    '''
+
+    pass
+
+
+@check_game_end
+def Brezhnev_Doctrine(gamestate):
+    '''All Operations cards played by the USSR, for the remainder of this turn, receive +1 
+    to their Operations value (to a maximum of 4 Operations per card).
+    '''
+
+    pass
+
+
+@check_game_end
+def Portuguese_Empire_Crumbles(gamestate):
+    '''Add 2 USSR Influence to Angola and the SE African States.'''
+
+    pass
+
+
+@check_game_end
+def South_African_Unrest(gamestate):
+    '''The USSR either adds 2 Influence to South Africa or adds 1 Influence to South Africa 
+    and 2 Influence to a single country adjacent to South Africa.'''
+
+    pass
+
+
+@check_game_end
+def Allende(gamestate):
+    '''Add 2 USSR Influence to Chile.'''
+
+    pass
+
+
+@check_game_end
+def Willy_Brandt(gamestate):
+    '''The USSR receives 1 VP and adds 1 Influence to West Germany. This Event cancels the 
+    effect(s) of the “#21 – NATO” Event for West Germany only. This Event is prevented / 
+    canceled by the “#96 – Tear Down this Wall” Event.'''
+
+    pass
+
+
+@check_game_end
+def Muslim_Revolution(gamestate):
+    '''Remove all US Influence from 2 of the following countries: Sudan, Iran, Iraq, 
+    Egypt, Libya, Saudi Arabia, Syria, Jordan. This Event cannot be used after the 
+    “#110 – AWACS Sale to Saudis” Event has been played.'''
+
+    pass
+
+
+@check_game_end
+def ABM_Treaty(gamestate):
+    '''Improve the DEFCON level by 1 and then conduct Operations using the Operations 
+    value of this card.'''
+
+    pass
+
+
+@check_game_end
+def Cultural_Revolution(gamestate):
+    '''If the US has the “#6 – The China Card” card, the US must give the card to the 
+    USSR (face up and available to be played). If the USSR already has “#6 – The China Card” 
+    card, the USSR receives 1 VP.'''
+
+    pass
+
+
+MID_WAR_CARDS = (Event('Brush War', Brush_War, 3, 'neutral', 'The player attacks any country with a stability number of 1 or 2. Roll a die and subtract (-1) from the die roll for every adjacent enemy controlled country. On a modified die roll of 3-6, the player receives 1 VP and replaces all the opponent’s Influence in the target country with their Influence. The player adds 3 to its Military Operations Track.'),
+                 ScoringCard('central_am'),
+                 ScoringCard('southeast_asia'),
+                 Event('Arms Race', Arms_Race, 3, 'neutral', 'Compare each player’s value on the Military Operations Track. If the phasing player has a higher value than their opponent on the Military Operations Track, that player receives 1 VP. If the phasing player has a higher value than their opponent, and has met the “required” amount, on the Military Operations Track, that player receives 3 VP instead.'),
+                 Event('Cuban Missile Crisis', Cuban_Missile_Crisis, 3, 'neutral', 'Set the DEFCON level to 2. Any Coup Attempts by your opponent, for the remainder of this turn, will result in Global Thermonuclear War. Your opponent will lose the game. This card’s Event may be canceled, at any time, if the USSR removes 2 Influence from Cuba or the US removes 2 Influence from West Germany or Turkey.', True),
+                 Event('Nuclear Subs', Nuclear_Subs, 2, 'us', 'US Operations used for Coup Attempts in Battleground countries, for the remainder of this turn, do not degrade the DEFCON level. This card’s Event does not apply to any Event that would affect the DEFCON level (ex. the “#40 – Cuban Missile Crisis” Event).', True),
+                 Event('Quagmire', Quagmire, 3, 'ussr', 'On the US’s next action round, it must discard an Operations card with a value of 2 or more and roll 1-4 on a die to cancel this Event. Repeat this Event for each US action round until the US successfully rolls 1-4 on a die. If the US is unable to discard an Operations card, it must play all of its scoring cards and then skip each action round for the rest of the turn. This Event cancels the effect(s) of the “#106 – NORAD” Event (if applicable).', True),
+                 Event('SALT Negotiations', SALT_Negotiations, 3, 'neutral', 'Improve the DEFCON level by 2. For the remainder of the turn, both players receive -1 to all Coup Attempt rolls. The player of this card’s Event may look through the discard pile, pick any 1 non-scoring card, reveal it to their opponent and then place the drawn card into their hand.', True),
+                 Event('Bear Trap', Bear_Trap, 3, 'us', 'On the USSR’s next action round, it must discard an Operations card with a value of 2 or more and roll 1-4 on a die to cancel this Event. Repeat this Event for each USSR action round until the USSR successfully rolls 1-4 on a die. If the USSR is unable to discard an Operations card, it must play all of its scoring cards and then skip each action round for the rest of the turn.', True),
+                 Event('Summit', Summit, 1, 'neutral', 'Both players roll a die. Each player receives +1 to the die roll for each Region (Europe, Asia, etc.) they Dominate or Control. The player with the highest modified die roll receives 2 VP and may degrade or improve the DEFCON level by 1 (do not reroll ties).'),
+                 Event('How I Learned to Stop Worrying', How_I_Learned, 2, 'neutral', 'Set the DEFCON level to any level desired (1-5). The player adds 5 to its Military Operations Track.', True),
+                 Event('Junta', Junta, 2, 'neutral', 'Add 2 Influence to a single country in Central or South America. The player may make free Coup Attempts or Realignment rolls in either Central or South America using the Operations value of this card.'),
+                 Event('Kitchen Debates', Kitchen_Debates, 1, 'us', 'If the US controls more Battleground countries than the USSR, the US player uses this Event to poke their opponent in the chest and receive 2 VP!', True),
+                 Event('Missile Envy', Missile_Envy, 2, 'neutral', 'Exchange this card for your opponent’s highest value Operations card. If 2 or more cards are tied, opponent chooses. If the exchanged card contains an Event applicable to yourself or both players, it occurs immediately. If it contains an opponent’s Event, use the Operations value (no Event). The opponent must use this card for Operations during their next action round.'),
+                 Event('We Will Bury You', We_Will_Bury_You, 4, 'ussr', 'Degrade the DEFCON level by 1. Unless the #32 UN Intervention card is played as an Event on the US’s next action round, the USSR receives 3 VP.', True),
+                 Event('Brezhnev Doctrine', Brezhnev_Doctrine, 3, 'ussr', 'All Operations cards played by the USSR, for the remainder of this turn, receive +1 to their Operations value (to a maximum of 4 Operations per card).', True),
+                 Event('Portuguese Empire Crumbles', Portuguese_Empire_Crumbles, 2, 'ussr', 'Add 2 USSR Influence to Angola and the SE African States.', True),
+                 Event('South African Unrest', South_African_Unrest, 2, 'ussr', 'The USSR either adds 2 Influence to South Africa or adds 1 Influence to South Africa and 2 Influence to a single country adjacent to South Africa.'),
+                 Event('Allende', Allende, 1, 'ussr', 'Add 2 USSR Influence to Chile.', True),
+                 Event('Willy Brandt', Willy_Brandt, 2, 'ussr', 'The USSR receives 1 VP and adds 1 Influence to West Germany. This Event cancels the effect(s) of the “#21 – NATO” Event for West Germany only. This Event is prevented / canceled by the “#96 – Tear Down this Wall” Event.', True),
+                 Event('Muslim Revolution', Muslim_Revolution, 4, 'ussr', 'Remove all US Influence from 2 of the following countries: Sudan, Iran, Iraq, Egypt, Libya, Saudi Arabia, Syria, Jordan. This Event cannot be used after the “#110 – AWACS Sale to Saudis” Event has been played.'),
+                 Event('ABM Treaty', ABM_Treaty, 4, 'neutral', 'Improve the DEFCON level by 1 and then conduct Operations using the Operations value of this card.'),
+                 Event('Cultural Revolution', Cultural_Revolution, 3, 'If the US has the “#6 – The China Card” card, the US must give the card to the USSR (face up and available to be played). If the USSR already has “#6 – The China Card” card, the USSR receives 1 VP.', True),
+                 )
+
 #print(EARLY_WAR_CARDS)
 
 

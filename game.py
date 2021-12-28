@@ -21,6 +21,7 @@ class GameState:
         self.defcon = Defcon()
         self.turn = 0 # 0 for setup, otherwise actual
         self.action_round = 0 # 0 for headline, otherwise actual
+        self.phasing_player = us_player
 
         # various flags for card events
         self.IRON_LADY_PLAYED = False
