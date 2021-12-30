@@ -2,7 +2,8 @@
 
 import itertools
 
-from cards import EARLY_WAR_CARDS, Pile, Card, USSR_EVENT, US_EVENT, NEUTRAL_EVENT, SCORING
+from cards import Pile, Card, USSR_EVENT, US_EVENT, NEUTRAL_EVENT, SCORING
+from cards import EARLY_WAR_CARDS, MID_WAR_CARDS, LATE_WAR_CARDS
 from board import MAP, Defcon, SpaceRace
 from players import US_PLAYER, USSR_PLAYER
 from test_toolbox import basic_starting_influence
@@ -21,7 +22,9 @@ class GameState:
         self.defcon = Defcon()
         self.turn = 0 # 0 for setup, otherwise actual
         self.action_round = 0 # 0 for headline, otherwise actual
+        self.total_action_rounds = 6
         self.phasing_player = ussr_player
+        self.hand_size = 8
 
         # various flags for card events
         self.IRON_LADY_PLAYED = False
@@ -146,14 +149,46 @@ class GameState:
         return game_end
 
 
+    def begin_new_turn(self):
+
+        self.turn += 1
+
+        print(f'Begin Turn {self.turn}.')
+
+        if self.turn == 4:
+
+            self.hand_size += 1
+            self.total_action_rounds += 1
+            self.draw_pile.cards += MID_WAR_CARDS
+            self.draw_pile.shuffle()
+
+        if self.turn == 8:
+
+            self.draw_pile.cards += LATE_WAR_CARDS
+            self.draw_pile.shuffle()
+
+        self.reset_turn_only_flags()
+
+        # both players draw up to the current hand size
+        us_hand_size = len(self.us_player.hand)
+        ussr_hand_size = len(self.ussr_player.hand)
+
+        us_to_draw = self.hand_size - us_hand_size
+        ussr_to_draw = self.hand_size - ussr_hand_size
+
+        # TODO: Actual alternating draws so that reshuffles aren't biased
+
+        self.us_player.recieve_cards(self.draw_pile.draw(us_to_draw))
+        self.ussr_player.recieve_cards(self.draw_pile.draw(ussr_to_draw))
+
+
     def begin_game(self, player_setup=False):
         '''Shuffle the draw pile, deal each player 8 cards and give
         the USSR player the china card.'''
 
         self.draw_pile.shuffle()
-        self.us_player.recieve_cards(self.draw_pile.draw(8))
-        self.ussr_player.recieve_cards(self.draw_pile.draw(8))
         self.ussr_player.recieve_china_card(available=True)
+        self.begin_new_turn()
 
         if player_setup:
             # ussr (starting phasing player) distributes 6 influence in eastern europe
@@ -166,6 +201,12 @@ class GameState:
             # typical setup, US distributes two anywhere they have influence
             us_countries = self.map.has_player_influence(self.phasing_player.superpower)
             execute_choices(ops_value=2, countries=us_countries)
+
+            self.swap_phasing()
+
+        else:
+
+            basic_starting_influence(self.map)
 
 
     def reset_game(self, cards):
@@ -190,6 +231,43 @@ class GameState:
         self.CONTAINMENT = False
         self.RED_PURGE = False
         self.RED_SCARE = False
+
+
+    def run_game(self, player_setup=False):
+        '''Commence and maintain the game until it ends.'''
+
+        # draws starting hands, does beginning influence
+        begin_game(player_setup)
+        assert self.phasing_player == self.ussr_player, (self.phasing_player, self.ussr_player)
+
+        while True:
+
+            while True:
+
+                if self.action_round == 0:
+
+                    self.run_headline_phase()
+
+                elif self.action_round > self.total_action_rounds:
+
+                    break
+
+                else:
+
+                    self.run_action_round(self.ussr_player)
+                    self.run_action_round(self.us_player)
+
+                self.action_round += 1
+
+            begin_new_turn()
+
+
+    def run_action_round(player):
+        '''Let player do their action round.'''
+
+        pass
+
+
 
 
 def expand_coup_actions(card, game_state, player, action_type='COUP'):
