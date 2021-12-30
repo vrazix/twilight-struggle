@@ -25,6 +25,11 @@ class MapRegion(Enum):
     southeast_asia = 'Southeast Asia'
 
 
+WESTERN_EU = MapRegion.western_eu
+EASTERN_EU = MapRegion.eastern_eu
+SOUTHEAST_ASIA = MapRegion.southeast_asia
+
+
 class Country:
 
     def __init__(self, name, scoring_region, map_regions, neighbors, stability, us_influence=0, ussr_influence=0, battleground=False):
@@ -218,8 +223,24 @@ class CountryBundle(dict):
         return CountryBundle({name: country for name, country in self.items() if country.scoring_region == SOUTH_AMERICA_SCORING})
 
 
+    def western_eu(self):
+        return CountryBundle({name: country for name, country in self.items() if WESTERN_EU in country.map_regions})
+
+
+    def eastern_eu(self):
+        return CountryBundle({name: country for name, country in self.items() if EASTERN_EU in country.map_regions})
+
+
+    def se_asia(self):
+        return CountryBundle({name: country for name, country in self.items() if SOUTHEAST_ASIA in country.map_regions})
+
+
     def has_any_influence(self):
         return CountryBundle({name: country for name, country in self.items() if country.has_any_influence()})
+
+
+    def has_player_influence(self, player)
+        return CountryBundle({name: country for name, country in self.items() if country.has_player_influence(player)})
 
 
     def has_enemy_influence(self, enemy):

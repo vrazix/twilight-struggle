@@ -739,6 +739,7 @@ def NORAD(gamestate):
     each Action Round, if Canada is US-controlled and the DEFCON level moved to 2 
     during that Action Round. This Event is canceled by the “#42 – Quagmire” Event.'''
 
+    # TODO: add NORAD trigger
     gamestate.NORAD_ACTIVE = True
 
     return True

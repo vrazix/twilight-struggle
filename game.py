@@ -2,7 +2,7 @@
 
 import itertools
 
-from cards import EARLY_WAR_CARDS, Pile, Card
+from cards import EARLY_WAR_CARDS, Pile, Card, USSR_EVENT, US_EVENT, NEUTRAL_EVENT, SCORING
 from board import MAP, Defcon, SpaceRace
 from players import US_PLAYER, USSR_PLAYER
 from test_toolbox import basic_starting_influence
@@ -21,7 +21,7 @@ class GameState:
         self.defcon = Defcon()
         self.turn = 0 # 0 for setup, otherwise actual
         self.action_round = 0 # 0 for headline, otherwise actual
-        self.phasing_player = us_player
+        self.phasing_player = ussr_player
 
         # various flags for card events
         self.IRON_LADY_PLAYED = False
@@ -38,7 +38,115 @@ class GameState:
         self.NORAD_ACTIVE = False
 
 
-    def begin_game(self):
+    def swap_phasing(self):
+
+        if self.phasing_player == self.us_player:
+            self.phasing_player = self.ussr_player
+        elif self.phasing_player == self.ussr_player
+            self.phasing_player = self.us_player
+        else:
+            assert False, self.phasing_player
+
+
+    def execute_choices(self, card=None, ops_value=0, influence=False, 
+                        realign=False, coup=False, countries=None):
+        '''Basic choice executer for the current phasing player. If an Event object
+        is passed, then the phasing player remains the same but the Event's alignment
+        is used to determine the executing player.
+
+        Parameters:
+        ----------
+        card : Event object or None (default None)
+            This executes the event by the event's alignment player or the phasing
+            player if the event is neutral.
+        ops_value : int (default 0)
+            Ops value with which to execute operation-point value choices. Different
+            from the card in case of any modifiers.
+        influence : bool (default False)
+            Allow the player to place influence, potentially restricted by `countries`.
+        realign : bool (default False)
+            Allow the player to execute realignments, potentially restricted by
+            `countries`.
+        coup : bool (default False)
+            Allow the player to execute a coup, potentially restricted by `countries`.
+        countries : CountryBundle or None (default None)
+            If given, the subset of countries available for the operations. If None,
+            all countries are available.
+        '''
+
+        # game end only possible via event or coup
+
+        game_end = False
+
+        if card:
+
+            game_end = self.execute_card_choice(card)
+
+        elif ops_value > 0:
+
+            if influence:
+
+                self.execute_influence_choice(ops_value, countries)
+
+            elif realign:
+
+                self.execute_realignment_choice(ops_value, countries)
+
+            elif coup:
+
+                game_end = execute_coup_choice(ops_value, countries)
+
+            else:
+
+                raise ValueError(f'Positive ops value but no operations selected (influence={influence}, realign={realign}, coup={coup}).')
+
+        else:
+
+            raise ValueError(f'No card ({card}) and non positive ops value ({ops_value}).')
+
+        return game_end
+
+
+    def execute_card_choice(self, card):
+        '''Execute the card Event.
+
+        Returns the game_end state (True for Game Over)'''
+
+        if card.alignment == USSR_EVENT:
+
+            # record the current phasing player so we may reset
+            # to them after executing the USSR event
+            prior_phasing = self.phasing_player
+            self.phasing_player = self.ussr_player
+
+            # call the card's function
+            game_end = card.func(self)
+
+            self.phasing_player = prior_phasing
+
+        elif card.alignment == US_EVENT:
+
+            prior_phasing = self.phasing_player
+            self.phasing_player = self.us_player
+
+            game_end = card.func(self)
+
+            self.phasing_player = self.prior_phasing
+
+        elif card.alignment == NEUTRAL_EVENT:
+
+            game_end = card.func(self)
+
+        else:
+            # the only other possibility should be a Scoring Card
+            assert card._card_class == SCORING
+
+            game_end = card.func(self)
+
+        return game_end
+
+
+    def begin_game(self, player_setup=False):
         '''Shuffle the draw pile, deal each player 8 cards and give
         the USSR player the china card.'''
 
@@ -46,6 +154,18 @@ class GameState:
         self.us_player.recieve_cards(self.draw_pile.draw(8))
         self.ussr_player.recieve_cards(self.draw_pile.draw(8))
         self.ussr_player.recieve_china_card(available=True)
+
+        if player_setup:
+            # ussr (starting phasing player) distributes 6 influence in eastern europe
+            execute_choices(ops_value=6, countries=self.map.eastern_eu())
+            self.swap_phasing()
+
+            # us distributes 7 in western europe
+            execute_choices(ops_value=7, countries=self.map.western_eu())
+
+            # typical setup, US distributes two anywhere they have influence
+            us_countries = self.map.has_player_influence(self.phasing_player.superpower)
+            execute_choices(ops_value=2, countries=us_countries)
 
 
     def reset_game(self, cards):
@@ -244,6 +364,9 @@ def expand_influence_actions(card, game_state, player):
     any location not controlled by opp OR one in any location controlled by opp.
 
     For three...'''
+
+    # TODO: Add logic for China Card-like bonuses, e.g. if all of the allocated influence
+    # is in Asia, an extra choice in Asia is available
 
     influence_actions = []
 

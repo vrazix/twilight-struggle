@@ -8,13 +8,17 @@ from board import SpaceRace
 
 class Player:
     
-    def __init__(self, superpower):
+    def __init__(self, superpower, ai=False):
 
         self.superpower = SuperPower[superpower]
         self.hand = list()
         self.china_card = 0
         self.space_race = SpaceRace()
         self.mil_ops = 0
+
+        # determines whether choices come from an algorithm (True)
+        # or from input on the command line (False)
+        self.ai = ai
 
 
     def reset_turn(self):
