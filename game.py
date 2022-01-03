@@ -151,6 +151,9 @@ class GameState:
 
     def begin_new_turn(self):
 
+        if self.turn == 10:
+            end_game_scoring(self)
+
         self.turn += 1
 
         print(f'Begin Turn {self.turn}.')
@@ -237,7 +240,7 @@ class GameState:
         '''Commence and maintain the game until it ends.'''
 
         # draws starting hands, does beginning influence
-        begin_game(player_setup)
+        self.begin_game(player_setup)
         assert self.phasing_player == self.ussr_player, (self.phasing_player, self.ussr_player)
 
         while True:
@@ -262,12 +265,27 @@ class GameState:
             begin_new_turn()
 
 
-    def run_action_round(player):
+    def run_headline_phase(self):
+        '''Execute headline phase.
+
+        1) Both players pick a card in their hand to headline
+            This is normally done simultaneously, but here we'll juse use USSR->US
+        2) Compare ops_value, higher goes first
+            If a tie, US player goes first
+        3) Resolve Events (or Scoring)
+        '''
+        pass
+
+
+    def run_action_round(self, player):
         '''Let player do their action round.'''
 
         pass
 
 
+def end_game_scoring(gamestate):
+    '''Compute final score.'''
+    pass
 
 
 def expand_coup_actions(card, game_state, player, action_type='COUP'):
